@@ -3,11 +3,20 @@
   <head>
     <base href="/">
     <meta charset="utf-8">
-    <title>FountainJS</title>
+    <title>ML Builder</title>
     <meta name="description" content="">
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <!--link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/-->
+    <link rel="stylesheet" href="../bower_components/materialize/dist/css/materialize.min.css">
+
+    <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="icon" type="image/png" href="http://fountainjs.io/assets/imgs/fountain.png" />
-  
+
     <!-- build:css({.tmp,src}) styles/vendor.css -->
     <!-- bower:css -->
     <!-- run `gulp inject` to automatically populate bower styles dependencies -->
@@ -16,12 +25,20 @@
 
     <!-- build:css({.tmp,src}) styles/app.css -->
     <link rel="stylesheet" href="index.css"/>
+
     <!-- endbuild -->
   </head>
 
 
   <body ng-app="app">
     <ui-view></ui-view>
+
+    <!--Import jQuery before materialize.js-->
+    <!--script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script-->
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <!--script type="text/javascript" src="js/materialize.min.js"></script-->
+    <!--script src="../node_modules/materialize-css/dist/js/materialize.min.js"></script-->
+    <script src="../bower_components/materialize/dist/js/materialize.js"></script>
   </body>
 
   <!-- build:js({.tmp,src}) scripts/vendor.js -->

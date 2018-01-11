@@ -70,5 +70,6 @@
     "extends": [
       "xo-space"
     ]
-  }
+  },
+  "dependencies": {}
 }
