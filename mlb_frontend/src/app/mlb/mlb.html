@@ -1,18 +1,19 @@
-<div class="section no-pad-bot">
+<div class="section no-pad-bot" ng-controller="mlbCtrl">
   <div class="container">
     <br><br>
-    <h1 class="header center teal-text text-lighten-2">Machine Learning Builder</h1>
+    <h1 class="header center teal-text text-lighten-2">{{ title }}</h1>
     <div class="row center">
       <h5 class="header col s12 light">Press the button bellow to send a CSV file.</h5>
+
+      <div
+        class="btn btn-primary btn-upload"
+        upload-button
+        url="{{uploadURL}}"
+        data="mlPlan"
+        accept=".csv"
+        on-success="onSuccessCSVUpload(response)"
+      >Upload a CSV File</div>
     </div>
-    <div class="row center">
-      <a id="download-button"
-         ui-sref="mlbuilder" ui-sref-active="active"
-         class="btn-large waves-effect waves-light teal lighten-1">
-        Send file
-      </a>
-    </div>
-    <br><br>
 
   </div>
 </div>
