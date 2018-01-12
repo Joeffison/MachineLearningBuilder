@@ -15,6 +15,7 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
   $stateProvider
     .state('mlbuilder', {
       url: '/mlbuilder',
-      template: '<h3>We are going to place a page where you can evaluate some ML models here.</h3>'
+      templateUrl: 'app/mlb/mlb.html',
+      controller: 'mlbCtrl'
     });
 }
