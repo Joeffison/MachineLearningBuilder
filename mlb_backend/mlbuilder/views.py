@@ -65,6 +65,7 @@ def __mlbuilder(csv_file, predictors, targets):
     implemented_models = [
         ("Decision Tree", __decision_tree),
         ("Logistic Regression", __logistic_regression),
+        ("Naive Bayes", __naive_bayes)
     ]
 
     return {
@@ -82,3 +83,7 @@ def __decision_tree(X, Y):
 def __logistic_regression(X, Y):
     from sklearn.linear_model import LogisticRegression
     return LogisticRegression().fit(X, Y)
+
+def __naive_bayes(X, Y):
+    from sklearn.naive_bayes import GaussianNB
+    return GaussianNB().fit(X, Y)
