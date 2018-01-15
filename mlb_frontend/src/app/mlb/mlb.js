@@ -7,8 +7,13 @@ angular.module('app').controller('mlbCtrl', function($scope, $http) {
     plan: ["classification"]
   };
 
-  $scope.onSuccessCSVUpload = function (data) {
-    console.log("csvupload", "" + prettyPrintJson(data));
+  $scope.models = [];
+
+  $scope.onSuccessCSVUpload = function (response) {
+    $scope.models.length = 0;
+    angular.forEach(response.data.models, function (item) {
+      $scope.models.push(item);
+    });
   };
 
   function prettyPrintJson(json) {

@@ -15,5 +15,20 @@
       >Upload a CSV File</div>
     </div>
 
+    <table ng-show="models.length > 0" class="highlight centered responsive-table">
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Accurary Score</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-repeat="model in models | orderBy: '-accuracy_score'">
+            <td>{{model.name}}</td>
+            <td>{{model.accuracy_score}}</td>
+          </tr>
+        </tbody>
+      </table>
   </div>
 </div>
