@@ -64,6 +64,7 @@ def __mlbuilder(csv_file, predictors, targets):
 
     implemented_models = [
         ("Decision Tree", __decision_tree),
+        ("Random Forest", __random_forest),
         ("Logistic Regression", __logistic_regression),
         ("Naive Bayes", __naive_bayes)
     ]
@@ -77,6 +78,10 @@ def __mlbuilder(csv_file, predictors, targets):
 def __decision_tree(X, Y):
     from sklearn.tree import DecisionTreeClassifier
     return DecisionTreeClassifier().fit(X, Y)
+
+def __random_forest(X, Y):
+    from sklearn.ensemble import RandomForestClassifier
+    return RandomForestClassifier().fit(X, Y)
 
 # Despite its name, it's a classification algorithm
 # which predicts the probability of occurrence of an event by fitting data to a logit function.
