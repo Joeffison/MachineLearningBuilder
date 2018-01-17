@@ -27,17 +27,26 @@
                 <i class="large material-icons">menu</i>
               </a>
               <ul>
-                <li><a class="btn-floating teal tooltipped"
-                       data-position="bottom" data-delay="50" data-tooltip="Download Code to Create Model"
-                       ng-click="onModelSelected(model)">
+                <li><a class="btn-floating red tooltipped"
+                       data-position="bottom" data-delay="50" data-tooltip="Learn more about this model"
+                       ng-href="model.learn_more">
+                  <i class="material-icons">format_quote</i>
+                </a></li>
+                <li><a class="btn-floating yellow tooltipped"
+                       data-position="bottom" data-delay="50" data-tooltip="Download Code to Create Model (optional)"
+                       ng-click="downloadCreateModel(model)">
+                  <i class="material-icons">attach_file</i>
+                </a></li>
+                <li><a class="btn-floating green tooltipped"
+                       data-position="bottom" data-delay="50" data-tooltip="Download Code to Load/Use Model"
+                       ng-click="downloadLoadModel(model)">
                   <i class="material-icons">file_download</i>
                 </a></li>
-                <!--
-                <li><a class="btn-floating red" ng-click="onModelSelected(model)"><i class="material-icons">insert_chart</i></a></li>
-                <li><a class="btn-floating yellow darken-1" ng-click="onModelSelected(model)"><i class="material-icons">format_quote</i></a></li>
-                <li><a class="btn-floating green" ng-click="onModelSelected(model)"><i class="material-icons">publish</i></a></li>
-                <li><a class="btn-floating blue" ng-click="onModelSelected(model)"><i class="material-icons">attach_file</i></a></li>
-                -->
+                <li><a class="btn-floating blue tooltipped"
+                       data-position="bottom" data-delay="50" data-tooltip="Download ML Model"
+                       ng-click="onModelSelected(model)">
+                  <i class="material-icons">extension</i>
+                </a></li>
               </ul>
             </div>
           </div>

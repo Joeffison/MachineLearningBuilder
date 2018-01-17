@@ -21,6 +21,16 @@ function mlbCtrl(FileSaver, Blob, $scope, $http) {
     FileSaver.saveAs(data, 'code_create_model.py');
   };
 
+  $scope.downloadCreateModel = function(model) {
+    var data = new Blob([model.code_create_model], { type: 'text/plain;charset=utf-8' });
+    FileSaver.saveAs(data, 'code_create_model.py');
+  };
+
+  $scope.downloadLoadModel = function(model) {
+    var data = new Blob([model.code_load_model], { type: 'text/plain;charset=utf-8' });
+    FileSaver.saveAs(data, 'code_load_model.py');
+  };
+
   function prettyPrintJson(json) {
     return JSON ? JSON.stringify(json, null, '  ') : 'your browser doesnt support JSON so cant pretty print';
   }
