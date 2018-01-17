@@ -12,7 +12,6 @@ from rest_framework import status
 
 from .models import MLModel
 
-
 def __404_page():
     return HttpResponse("404 - Page not found ;)")
     #content = {"please move along": "404 - Page not found ;)"}
@@ -47,7 +46,7 @@ def mlbuilder(csv_file):
     content = csv_file.read().decode("utf-8")
     #TODO: Fix encoding
     predictors = content.split("\n")[0].replace("\ufeff", "").replace("\r", "").split(",")
-    targets = predictors[-1]
+    targets = [predictors[-1]]
     predictors = predictors[:-1]
     path = default_storage.save(os.path.join("tmp", csv_file.name), ContentFile(content))
     tmp_file = os.path.join(settings.MEDIA_ROOT, path)
@@ -63,15 +62,16 @@ def __mlbuilder(csv_file, predictors, targets):
                                                                   test_size=.3)
 
     implemented_models = [
-        ("Decision Tree", __decision_tree),
-        ("Random Forest", __random_forest),
-        ("Logistic Regression", __logistic_regression),
-        ("Naive Bayes", __naive_bayes)
+        ("Decision Tree", __decision_tree, "from sklearn.tree import DecisionTreeClassifier"),
+        ("Random Forest", __random_forest, "from sklearn.ensemble import RandomForestClassifier"),
+        ("Logistic Regression", __logistic_regression, "from sklearn.linear_model import LogisticRegression"),
+        ("Gaussian Naive Bayes", __naive_bayes, "from sklearn.naive_bayes import GaussianNB")
     ]
 
     return {
         #"Predictors_Correlation": historical_data.corr()[targets],
-        "models": [MLModel(model[0], model[1](pred_train, tar_train), pred_test, tar_test).to_json()
+        "models": [MLModel(model[0], model[1](pred_train, tar_train), pred_test, tar_test, model[2], csv_file,
+                           predictors, targets).to_json()
                    for model in implemented_models]
     }
 
