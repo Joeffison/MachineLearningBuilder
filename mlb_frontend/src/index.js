@@ -1,2 +1,2 @@
 angular
-  .module('app', ['ui.router', 'lr.upload']);
+  .module('app', ['ui.router', 'lr.upload', 'ngFileSaver']);

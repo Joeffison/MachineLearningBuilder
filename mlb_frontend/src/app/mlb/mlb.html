@@ -15,20 +15,40 @@
       >Upload a CSV File</div>
     </div>
 
-    <table ng-show="models.length > 0" class="highlight centered responsive-table">
-        <thead>
-          <tr>
-              <th>Name</th>
-              <th>Accurary Score</th>
-          </tr>
-        </thead>
+    <div class="row">
+      <div class="col s12 m6" ng-repeat="model in models | orderBy: '-accuracy_score'">
+        <div class="card">
+          <div class="card-content lighten-1">
+            <span class="card-title">{{model.name}}
+              <!--span class="new badge" ng-class="model.accuracy_score >= 0.7 ? 'green' : 'red'" data-badge-caption="(accuracy score)">{{model.accuracy_score | number: 3}}</span-->
+            </span>
+            <div class="fixed-action-btn mlb-fixed-action-btn-in-card horizontal">
+              <a class="btn-floating btn-large red">
+                <i class="large material-icons">menu</i>
+              </a>
+              <ul>
+                <li><a class="btn-floating teal tooltipped"
+                       data-position="bottom" data-delay="50" data-tooltip="Download Code to Create Model"
+                       ng-click="onModelSelected(model)">
+                  <i class="material-icons">file_download</i>
+                </a></li>
+                <!--
+                <li><a class="btn-floating red" ng-click="onModelSelected(model)"><i class="material-icons">insert_chart</i></a></li>
+                <li><a class="btn-floating yellow darken-1" ng-click="onModelSelected(model)"><i class="material-icons">format_quote</i></a></li>
+                <li><a class="btn-floating green" ng-click="onModelSelected(model)"><i class="material-icons">publish</i></a></li>
+                <li><a class="btn-floating blue" ng-click="onModelSelected(model)"><i class="material-icons">attach_file</i></a></li>
+                -->
+              </ul>
+            </div>
+          </div>
+          <div class="card-content">
+            <p>
+              Accuracy score: {{model.accuracy_score | number: 3}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <tbody>
-          <tr ng-repeat="model in models | orderBy: '-accuracy_score'">
-            <td>{{model.name}}</td>
-            <td>{{model.accuracy_score}}</td>
-          </tr>
-        </tbody>
-      </table>
   </div>
 </div>

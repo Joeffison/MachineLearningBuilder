@@ -1,4 +1,4 @@
-angular.module('app').controller('mlbCtrl', function($scope, $http) {
+function mlbCtrl(FileSaver, Blob, $scope, $http) {
   $scope.title = "Machine Learning Builder";
 
   $scope.uploadURL = 'http://127.0.0.1:8000/mlbuilder/upload/csv/';
@@ -16,8 +16,16 @@ angular.module('app').controller('mlbCtrl', function($scope, $http) {
     });
   };
 
+  $scope.onModelSelected = function(model) {
+    var data = new Blob([model.code_create_model], { type: 'text/plain;charset=utf-8' });
+    FileSaver.saveAs(data, 'code_create_model.py');
+  };
+
   function prettyPrintJson(json) {
     return JSON ? JSON.stringify(json, null, '  ') : 'your browser doesnt support JSON so cant pretty print';
   }
 
-});
+}
+
+angular.module('app')
+  .controller('mlbCtrl', ['FileSaver', 'Blob', '$scope', '$http', mlbCtrl]);
