@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 import pickle
 
 csv_file = "{csv_file}"
-model_file = csv_file[:-3] + "mlbuilder-generated.model"
+model_file = "{model_file}"
 predictors = {predictors}
 targets = {targets}
 
@@ -32,8 +32,7 @@ import pickle
 
 import numpy as np
 
-csv_file = "{csv_file}"
-model_file = csv_file[:-3] + "mlbuilder-generated.model"
+model_file = "{model_file}"
 model = pickle.load(open(model_file, 'rb'))
 
 # input_to_predict has to follow the order below:
