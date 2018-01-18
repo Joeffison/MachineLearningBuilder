@@ -11,6 +11,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import status
 
 from .models import MLModel
+from .constants import references
 
 def __404_page():
     return HttpResponse("404 - Page not found ;)")
@@ -62,16 +63,16 @@ def __mlbuilder(csv_file, predictors, targets):
                                                                   test_size=.3)
 
     implemented_models = [
-        ("Decision Tree", __decision_tree, "from sklearn.tree import DecisionTreeClassifier"),
-        ("Random Forest", __random_forest, "from sklearn.ensemble import RandomForestClassifier"),
-        ("Logistic Regression", __logistic_regression, "from sklearn.linear_model import LogisticRegression"),
-        ("Gaussian Naive Bayes", __naive_bayes, "from sklearn.naive_bayes import GaussianNB")
+        ("Decision Tree", __decision_tree, "from sklearn.tree import DecisionTreeClassifier", references.decision_tree),
+        ("Random Forest", __random_forest, "from sklearn.ensemble import RandomForestClassifier", references.random_forest),
+        ("Logistic Regression", __logistic_regression, "from sklearn.linear_model import LogisticRegression", references.logistic_regression),
+        ("Gaussian Naive Bayes", __gaussian_naive_bayes, "from sklearn.naive_bayes import GaussianNB", references.gaussian_naive_bayes)
     ]
 
     return {
         #"Predictors_Correlation": historical_data.corr()[targets],
         "models": [MLModel(model[0], model[1](pred_train, tar_train), pred_test, tar_test, model[2], csv_file,
-                           predictors, targets).to_json()
+                           predictors, targets, model[3]).to_json()
                    for model in implemented_models]
     }
 
@@ -89,6 +90,6 @@ def __logistic_regression(X, Y):
     from sklearn.linear_model import LogisticRegression
     return LogisticRegression().fit(X, Y)
 
-def __naive_bayes(X, Y):
+def __gaussian_naive_bayes(X, Y):
     from sklearn.naive_bayes import GaussianNB
     return GaussianNB().fit(X, Y)

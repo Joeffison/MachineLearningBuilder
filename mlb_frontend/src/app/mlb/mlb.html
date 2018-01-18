@@ -27,9 +27,9 @@
                 <i class="large material-icons">menu</i>
               </a>
               <ul>
-                <li><a class="btn-floating red tooltipped"
+                <li><a class="btn-floating red tooltipped" target="_blank"
                        data-position="bottom" data-delay="50" data-tooltip="Learn more about this model"
-                       ng-href="model.learn_more">
+                       ng-href="{{model.references.url}}">
                   <i class="material-icons">format_quote</i>
                 </a></li>
                 <li><a class="btn-floating yellow tooltipped"
@@ -44,7 +44,7 @@
                 </a></li>
                 <li><a class="btn-floating blue tooltipped"
                        data-position="bottom" data-delay="50" data-tooltip="Download ML Model"
-                       ng-click="onModelSelected(model)">
+                       ng-href="{{downloadMLModel(model)}}">
                   <i class="material-icons">extension</i>
                 </a></li>
               </ul>

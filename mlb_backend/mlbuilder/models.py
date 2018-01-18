@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import os
 import pickle
 
-from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-import template_code
+from .constants import template_code
 
 
 # Create your models here.
 class MLModel(models.Model):
-    def __init__(self, name, model, pred_test, tar_test, model_import, csv_file, predictors, targets):
+    def __init__(self, name, model, pred_test, tar_test, model_import, csv_file, predictors, targets, references):
         self.name = name
         predictions = model.predict(pred_test)
         # Analyze accuracy of predictions
@@ -34,6 +32,8 @@ class MLModel(models.Model):
         model_file = default_storage.open(model_file, "wb")
         pickle.dump(model, model_file)
 
+        self.references = references
+
     def to_json(self):
         return {
             "name": self.name,
@@ -42,4 +42,5 @@ class MLModel(models.Model):
             "code_create_model": self.code_create_model,
             "code_load_model": self.code_load_model,
             "ml_model": self.ml_model,
+            "references": self.references,
         }

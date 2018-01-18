@@ -1,4 +1,4 @@
-function mlbCtrl(FileSaver, Blob, $scope, $http) {
+function mlbCtrl(FileSaver, Blob, $scope, $timeout) {
   $scope.title = "Machine Learning Builder";
 
   $scope.uploadURL = 'http://127.0.0.1:8000/mlbuilder/upload/csv/';
@@ -14,6 +14,13 @@ function mlbCtrl(FileSaver, Blob, $scope, $http) {
     angular.forEach(response.data.models, function (item) {
       $scope.models.push(item);
     });
+    $timeout(function() {
+      $('.tooltipped').tooltip({delay: 50});
+    }, 1000);
+  };
+
+  $scope.downloadMLModel = function(model) {
+    return "http://127.0.0.1:8000/get_file/" + model.ml_model;
   };
 
   $scope.onModelSelected = function(model) {
@@ -38,4 +45,4 @@ function mlbCtrl(FileSaver, Blob, $scope, $http) {
 }
 
 angular.module('app')
-  .controller('mlbCtrl', ['FileSaver', 'Blob', '$scope', '$http', mlbCtrl]);
+  .controller('mlbCtrl', ['FileSaver', 'Blob', '$scope', '$timeout', mlbCtrl]);
