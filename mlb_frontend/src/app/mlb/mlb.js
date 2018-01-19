@@ -9,14 +9,21 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants,
 
   $scope.models = [];
   $scope.onSuccessCSVUpload = function(response) {
-    mlbUtilsService.replaceArray($scope.models, response.data.models);
-    mlbUtilsService.activateTooltips();
+    updateModels(response.data.models);
   };
 
   $scope.onErrorCSVUpload = function(response) {
-    mlbUtilsService.replaceArray($scope.models, mlbModelService.models);
-    mlbUtilsService.activateTooltips();
+    updateModels(mlbModelService.models);
   };
+
+  function updateModels(newData) {
+    mlbUtilsService.replaceArray($scope.models, newData);
+    mlbUtilsService.activateTooltips();
+
+    angular.forEach($scope.models, function (item) {
+      item.downloadMLModel = mlbModelService.downloadMLModel(item);
+    });
+  }
 
 }
 

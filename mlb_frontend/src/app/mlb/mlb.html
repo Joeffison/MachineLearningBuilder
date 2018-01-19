@@ -43,9 +43,9 @@
                        ng-click="downloadLoadModel(model)">
                   <i class="material-icons">file_download</i>
                 </a></li>
-                <li><a class="btn-floating blue tooltipped"
+                <li><a class="btn-floating blue tooltipped" download
                        data-position="bottom" data-delay="50" data-tooltip="Download ML Model"
-                       ng-href="{{downloadMLModel(model)}}">
+                       ng-href="{{model.downloadMLModel}}">
                   <i class="material-icons">extension</i>
                 </a></li>
               </ul>

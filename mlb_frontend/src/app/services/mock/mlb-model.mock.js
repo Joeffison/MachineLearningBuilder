@@ -54,7 +54,8 @@ function mlbModelServiceMock(mlbUtilsService) {
   service.models = models;
 
   service.downloadMLModel = function(model) {
-    return "docs/mock_data/" + model.ml_model.replace("/", "_").replace("..", "").replace("\\", "");
+    return "https://raw.githubusercontent.com/Joeffison/MachineLearningBuilder/master/docs/mock_data/" +
+      model.ml_model.replace("/", "_").replace("..", "").replace("\\", "");
   };
 
   service.downloadCreateModel = function(model) {
