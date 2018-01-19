@@ -13,6 +13,11 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants,
     mlbUtilsService.activateTooltips();
   };
 
+  $scope.onErrorCSVUpload = function(response) {
+    mlbUtilsService.replaceArray($scope.models, mlbModelService.models);
+    mlbUtilsService.activateTooltips();
+  };
+
 }
 
 angular.module("app")

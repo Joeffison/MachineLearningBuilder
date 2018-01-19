@@ -1,6 +1,7 @@
 function mlbModelService(mlbResources, mlbUtilsService) {
   var service = this;
 
+  service.models = [];
   var mlPlan = {
     username: "trial",
     plan: ["classification"]
