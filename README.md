@@ -134,6 +134,9 @@ $ npm run serve
 
 [license]: <https://github.com/Joeffison/MachineLearningBuilder/blob/master/LICENSE>
 
+[paper tsanas parkinson]: <http://ieeexplore.ieee.org/document/6678640/>
+[paper-data tsanas parkinson]: <https://archive.ics.uci.edu/ml/datasets/LSVT+Voice+Rehabilitation>
+[paper-data-preprocessed tsanas parkinson]: <https://github.com/Joeffison/MachineLearningBuilder/blob/master/docs/mock_data/LSVT_voice_rehabilitation.csv>
 
 [//]: # (Referenced Images)
 [IMG Homepage]: <https://github.com/Joeffison/MachineLearningBuilder/raw/development/docs/img/mlb_page_home.png>
@@ -147,4 +150,7 @@ $ npm run serve
 ----
 <a name="footnote1"></a><sub>1.</sub> Every time a new model is created (either by rerunning MLBuilder for your data or by using the optional Python Script for recreating a particular model), the model will be potentially different (resulting in different predictions and consequently different accuracy results)
 
-<a name="footnote2"></a><sub>2.</sub> Keep in mind that there is no actual Backend Server running yet, thus you have to run the backend locally, so the services can run on the provided page and/or on your own build.
+<a name="footnote2"></a><sub>2.</sub> Keep in mind that there is no public Backend Server running yet, thus all data and models showed were previously uploaded (MLBuilder generated based on real data from a paper<sup>[[3]](#footnote3)</sup> published by the MIT and the universities of Oxford and Colorado). An alternative is to run your own build of this project (locally or not) to create models on your data.
+
+<a name="footnote3"></a><sub>3.</sub> A. Tsanas, M.A. Little, C. Fox, L.O. Ramig: Objective Automatic Assessment of Rehabilitative Speech Treatment in Parkinson's Disease, [IEEE Transactions on Neural Systems and Rehabilitation Engineering, Vol. 22, pp. 181-190][paper tsanas parkinson], January 2014. The data is available [here][paper-data tsanas parkinson] and the preprocessed data [here][paper-data-preprocessed tsanas parkinson].
+
