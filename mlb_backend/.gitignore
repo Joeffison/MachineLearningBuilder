@@ -102,3 +102,7 @@ ENV/
 
 # db
 *.sqlite3
+
+# MLBuilder
+# Temporary Files
+tmp/

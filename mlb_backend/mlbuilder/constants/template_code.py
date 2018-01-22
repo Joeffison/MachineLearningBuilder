@@ -17,6 +17,9 @@ targets = {targets}
 historical_data = pd.read_csv(csv_file)
 pred_train, pred_test, tar_train, tar_test = train_test_split(historical_data[predictors], historical_data[targets],
                                                               test_size=.3)
+if len(targets) == 1:
+    tar_train = tar_train.values.ravel()
+    tar_test = tar_test.values.ravel()
 model = DecisionTreeClassifier().fit(pred_train, tar_train)
 
 predictions = model.predict(pred_test)

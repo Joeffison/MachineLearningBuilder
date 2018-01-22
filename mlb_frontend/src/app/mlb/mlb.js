@@ -1,33 +1,31 @@
-function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants,
-                 $scope) {
-  $scope.title = mlbConstants.project_name;
+function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
+  var vm = this;
+  vm.title = mlbConstants.PROJECT_NAME;
 
-  $scope.uploadURL = mlbModelService.uploadURL;
-  $scope.downloadMLModel = mlbModelService.downloadMLModel;
-  $scope.downloadCreateModel = mlbModelService.downloadCreateModel;
-  $scope.downloadLoadModel = mlbModelService.downloadLoadModel;
-
-  $scope.models = [];
-  $scope.onSuccessCSVUpload = function(response) {
+  vm.uploadURL = mlbModelService.uploadURL;
+  vm.downloadMLModel = mlbModelService.downloadMLModel;
+  vm.downloadCreateModel = mlbModelService.downloadCreateModel;
+  vm.downloadLoadModel = mlbModelService.downloadLoadModel;
+  vm.printJson = mlbUtilsService.prettyPrintJson;
+  vm.models = [];
+  vm.onSuccessCSVUpload = function (response) {
     updateModels(response.data.models);
   };
 
-  $scope.onErrorCSVUpload = function(response) {
+  vm.onErrorCSVUpload = function () {
     updateModels(mlbModelService.models);
   };
 
   function updateModels(newData) {
-    mlbUtilsService.replaceArray($scope.models, newData);
+    mlbUtilsService.replaceArray(vm.models, newData);
     mlbUtilsService.activateTooltips();
 
-    angular.forEach($scope.models, function (item) {
+    angular.forEach(vm.models, function (item) {
       item.downloadMLModel = mlbModelService.downloadMLModel(item);
     });
   }
-
 }
 
-angular.module("app")
-  .controller("mlbCtrl", ["mlbModelService", "mlbUtilsService", "mlbConstants",
-    "$scope",
+angular.module('app')
+  .controller('MlbController', ['mlbModelService', 'mlbUtilsService', 'mlbConstants',
     mlbCtrl]);

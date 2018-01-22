@@ -12,10 +12,12 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
       url: '/',
       component: 'app'
     });
+
   $stateProvider
     .state('mlbuilder', {
       url: '/mlbuilder',
       templateUrl: 'app/mlb/mlb.html',
-      controller: 'mlbCtrl'
+      controller: 'MlbController',
+      controllerAs: 'vm'
     });
 }
