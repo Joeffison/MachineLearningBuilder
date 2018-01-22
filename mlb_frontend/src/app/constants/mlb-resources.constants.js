@@ -1,7 +1,8 @@
-BACKEND_URL = "http://127.0.0.1:8000";
+/* eslint no-undef: off */
+BACKEND_URL = 'http://127.0.0.1:8000';
 
-angular.module("app").constant("mlbResources", {
-  backend_url: BACKEND_URL,
-  get_file: BACKEND_URL + "/get_file/",
-  mlbuilder_upload_file: BACKEND_URL + "/mlbuilder/upload/csv/",
+angular.module('app').constant('mlbResources', {
+  BACKEND_URL: BACKEND_URL,
+  GET_FILE: BACKEND_URL + '/get_file/',
+  MLBUILDER_UPLOAD_FILE: BACKEND_URL + '/mlbuilder/upload/csv/'
 });
