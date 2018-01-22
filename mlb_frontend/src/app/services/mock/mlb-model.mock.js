@@ -77,8 +77,7 @@ function mlbModelServiceMock(mlbUtilsService) {
     });
   }
 }
-/*
+
 angular.module("app")
   .factory("mlbModelServiceMock", ["mlbUtilsService",
     mlbModelServiceMock]);
-*/
