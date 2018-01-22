@@ -47,8 +47,9 @@ def mlbuilder(csv_file):
     content = csv_file.read().decode("utf-8")
     #TODO: Fix encoding
     predictors = content.split("\n")[0].replace("\ufeff", "").replace("\r", "").split(",")
-    targets = [predictors[-1]]
-    predictors = predictors[:-1]
+    n_targets = 1
+    targets = predictors[-n_targets:]
+    predictors = predictors[:-n_targets]
     path = default_storage.save(os.path.join("tmp", csv_file.name), ContentFile(content))
     tmp_file = os.path.join(settings.MEDIA_ROOT, path)
 
@@ -62,6 +63,9 @@ def __mlbuilder(csv_file, predictors, targets):
     pred_train, pred_test, tar_train, tar_test = train_test_split(historical_data[predictors], historical_data[targets],
                                                                   test_size=.3)
 
+    if len(targets) == 1:
+        tar_train = tar_train.values.ravel()
+        tar_test = tar_test.values.ravel()
     implemented_models = [
         ("Decision Tree", __decision_tree, "from sklearn.tree import DecisionTreeClassifier", references.decision_tree),
         ("Random Forest", __random_forest, "from sklearn.ensemble import RandomForestClassifier", references.random_forest),
