@@ -9,7 +9,7 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
   vm.printJson = mlbUtilsService.prettyPrintJson;
   vm.models = [];
   vm.onSuccessCSVUpload = function (response) {
-    updateModels(response.data.models);
+    updateModels(response.data);
   };
 
   vm.onErrorCSVUpload = function () {
