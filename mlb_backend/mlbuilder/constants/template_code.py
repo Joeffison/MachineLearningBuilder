@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-template_model_creation = """
-import pandas as pd
+template_model_creation = """import pandas as pd
 from sklearn.model_selection import train_test_split
 
-{model_import}
+{model_import} as ChosenMLAlgorithm
 
 from sklearn.metrics import accuracy_score, confusion_matrix
 import pickle
@@ -20,7 +19,7 @@ pred_train, pred_test, tar_train, tar_test = train_test_split(historical_data[pr
 if len(targets) == 1:
     tar_train = tar_train.values.ravel()
     tar_test = tar_test.values.ravel()
-model = DecisionTreeClassifier().fit(pred_train, tar_train)
+model = ChosenMLAlgorithm().fit(pred_train, tar_train)
 
 predictions = model.predict(pred_test)
 # Analyze accuracy of prediction.
@@ -32,8 +31,7 @@ print accuracy_score(tar_test, predictions)
 pickle.dump(model, open(model_file, "wb"))
 """
 
-template_model_predictor = """
-import pickle
+template_model_predictor = """import pickle
 
 import numpy as np
 

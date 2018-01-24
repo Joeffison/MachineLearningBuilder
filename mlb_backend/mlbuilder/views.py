@@ -12,14 +12,64 @@ from rest_framework import status
 
 from .models import MLModel
 from .constants import references
+from .serializers import MLModelSerializer
+
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+
+
+def mlmodel_list(request):
+    """
+    List all ML Models, or create a new one.
+    """
+    if request.method == 'GET':
+        models = MLModel.objects.all()
+        serializer = MLModelSerializer(models, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    """
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = MLModelSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+    """
+    return HttpResponse(status=404)
+
+def mlmodel_detail(request, pk):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        model = MLModel.objects.get(pk=pk)
+    except MLModel.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = MLModelSerializer(model)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        return HttpResponse(status=404)
+        #data = JSONParser().parse(request)
+        #serializer = MLModelSerializer(model, data=data)
+        #if serializer.is_valid():
+        #    serializer.save()
+        #    return JsonResponse(serializer.data)
+        #return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        return HttpResponse(status=404)
+        #model.delete()
+        #return HttpResponse(status=204)
 
 def __404_page():
     return HttpResponse("404 - Page not found ;)")
     #content = {"please move along": "404 - Page not found ;)"}
     #return Response(content, status=status.HTTP_404_NOT_FOUND)
-
-def index(request):
-    return __404_page()
 
 def upload_csv(request):
     if "GET" == request.method:
@@ -38,7 +88,9 @@ def upload_csv(request):
             messages.error(request, "Uploaded file is too big (%.2f MB)." % (csv_file.size / (1000 * 1000),))
             return HttpResponse(messages)
 
-        return JsonResponse(mlbuilder(csv_file), status=status.HTTP_202_ACCEPTED, safe=False)
+        models = mlbuilder(csv_file)
+        serializer = MLModelSerializer(models, many=True)
+        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
     except Exception as e:
         return HttpResponse(e.message + repr(e), status=status.HTTP_400_BAD_REQUEST)
 
@@ -67,18 +119,18 @@ def __mlbuilder(csv_file, predictors, targets):
         tar_train = tar_train.values.ravel()
         tar_test = tar_test.values.ravel()
     implemented_models = [
-        ("Decision Tree", __decision_tree, "from sklearn.tree import DecisionTreeClassifier", references.decision_tree),
-        ("Random Forest", __random_forest, "from sklearn.ensemble import RandomForestClassifier", references.random_forest),
-        ("Logistic Regression", __logistic_regression, "from sklearn.linear_model import LogisticRegression", references.logistic_regression),
-        ("Gaussian Naive Bayes", __gaussian_naive_bayes, "from sklearn.naive_bayes import GaussianNB", references.gaussian_naive_bayes)
+        ("Decision Tree", __decision_tree),
+        ("Random Forest", __random_forest),
+        ("Logistic Regression", __logistic_regression),
+        ("Gaussian Naive Bayes", __gaussian_naive_bayes)
     ]
 
-    return {
-        #"Predictors_Correlation": historical_data.corr()[targets],
-        "models": [MLModel(model[0], model[1](pred_train, tar_train), pred_test, tar_test, model[2], csv_file,
-                           predictors, targets, model[3]).to_json()
-                   for model in implemented_models]
-    }
+    #"Predictors_Correlation": historical_data.corr()[targets],
+    models = [MLModel.create_from_results(model[0], model[1](pred_train, tar_train), pred_test, tar_test,
+                                          csv_file, predictors, targets)
+              for model in implemented_models]
+
+    return models
 
 def __decision_tree(X, Y):
     from sklearn.tree import DecisionTreeClassifier
