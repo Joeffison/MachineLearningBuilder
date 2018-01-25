@@ -7,7 +7,7 @@ function mlbModelService(mlbResources, mlbUtilsService) {
     plan: ['classification']
   }; */
 
-  service.uploadURL = mlbResources.MLBUILDER_UPLOAD_FILE;
+  service.uploadURL = mlbResources.MLBUILDER_CREATE;
 
   service.downloadMLModel = function (model) {
     return mlbResources.GET_FILE + model.model_file;

@@ -11,12 +11,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import status
 
 from .models import MLModel
-from .constants import references
 from .serializers import MLModelSerializer
-
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
 
 
 def mlmodel_list(request):
@@ -28,15 +23,13 @@ def mlmodel_list(request):
         serializer = MLModelSerializer(models, many=True)
         return JsonResponse(serializer.data, safe=False)
 
-    """
     elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = MLModelSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-    """
+        return ___build_based_on_csv(request)
+        # serializer = MLModelSerializer(data=JSONParser().parse(request))
+        # if serializer.is_valid():
+        #    serializer.save()
+        #    return JsonResponse(serializer.data, status=201)
+        # return JsonResponse(serializer.errors, status=400)
     return HttpResponse(status=404)
 
 def mlmodel_detail(request, pk):
@@ -53,29 +46,21 @@ def mlmodel_detail(request, pk):
         return JsonResponse(serializer.data)
 
     elif request.method == 'PUT':
-        return HttpResponse(status=404)
-        #data = JSONParser().parse(request)
-        #serializer = MLModelSerializer(model, data=data)
-        #if serializer.is_valid():
-        #    serializer.save()
-        #    return JsonResponse(serializer.data)
-        #return JsonResponse(serializer.errors, status=400)
+        pass
+        # data = JSONParser().parse(request)
+        # serializer = MLModelSerializer(model, data=data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return JsonResponse(serializer.data)
+        # return JsonResponse(serializer.errors, status=400)
 
     elif request.method == 'DELETE':
-        return HttpResponse(status=404)
-        #model.delete()
-        #return HttpResponse(status=204)
+        pass
+        # model.delete()
+        # return HttpResponse(status=204)
+    return HttpResponse(status=404)
 
-def __404_page():
-    return HttpResponse("404 - Page not found ;)")
-    #content = {"please move along": "404 - Page not found ;)"}
-    #return Response(content, status=status.HTTP_404_NOT_FOUND)
-
-def upload_csv(request):
-    if "GET" == request.method:
-        return __404_page()
-
-    # if not GET, then proceed
+def ___build_based_on_csv(request):
     try:
         csv_file = request.FILES["file"]
 
@@ -88,24 +73,21 @@ def upload_csv(request):
             messages.error(request, "Uploaded file is too big (%.2f MB)." % (csv_file.size / (1000 * 1000),))
             return HttpResponse(messages)
 
-        models = mlbuilder(csv_file)
+        # TODO: It MUST have a better way, as csv_file is <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>.
+        content = csv_file.read().decode("utf-8")
+        # TODO: Fix encoding
+        predictors = content.split("\n")[0].replace("\ufeff", "").replace("\r", "").split(",")
+        n_targets = 1
+        targets = predictors[-n_targets:]
+        predictors = predictors[:-n_targets]
+        path = default_storage.save(os.path.join("tmp", csv_file.name), ContentFile(content))
+        tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+
+        models = __mlbuilder(tmp_file, predictors, targets)
         serializer = MLModelSerializer(models, many=True)
         return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
     except Exception as e:
         return HttpResponse(e.message + repr(e), status=status.HTTP_400_BAD_REQUEST)
-
-def mlbuilder(csv_file):
-    #TODO: It must have a better way, as the data is in <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>.
-    content = csv_file.read().decode("utf-8")
-    #TODO: Fix encoding
-    predictors = content.split("\n")[0].replace("\ufeff", "").replace("\r", "").split(",")
-    n_targets = 1
-    targets = predictors[-n_targets:]
-    predictors = predictors[:-n_targets]
-    path = default_storage.save(os.path.join("tmp", csv_file.name), ContentFile(content))
-    tmp_file = os.path.join(settings.MEDIA_ROOT, path)
-
-    return __mlbuilder(tmp_file, predictors, targets)
 
 def __mlbuilder(csv_file, predictors, targets):
     import pandas as pd
@@ -125,7 +107,7 @@ def __mlbuilder(csv_file, predictors, targets):
         ("Gaussian Naive Bayes", __gaussian_naive_bayes)
     ]
 
-    #"Predictors_Correlation": historical_data.corr()[targets],
+    # "Predictors_Correlation": historical_data.corr()[targets],
     models = [MLModel.create_from_results(model[0], model[1](pred_train, tar_train), pred_test, tar_test,
                                           csv_file, predictors, targets)
               for model in implemented_models]
