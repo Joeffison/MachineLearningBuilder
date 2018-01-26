@@ -9,6 +9,10 @@ function mlbModelService(mlbResources, mlbUtilsService) {
 
   service.uploadURL = mlbResources.MLBUILDER_CREATE;
 
+  service.predict = function (id, predictors) {
+
+  };
+
   service.downloadMLModel = function (model) {
     return mlbResources.GET_FILE + model.model_file;
   };
