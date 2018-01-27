@@ -115,7 +115,7 @@ def ___build_based_on_csv(request):
         # TODO: It MUST have a better way, as csv_file is <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>.
         content = csv_file.read().decode("utf-8")
         # TODO: Fix encoding
-        predictors = content.split("\n")[0].replace("\ufeff", "").replace("\r", "").split(",")
+        predictors = content.split('\n')[0].replace('\ufeff', '').replace('\r', '').encode('UTF-8').split(',')
         n_targets = 1
         targets = predictors[-n_targets:]
         predictors = predictors[:-n_targets]

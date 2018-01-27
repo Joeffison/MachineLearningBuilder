@@ -8,6 +8,12 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
   vm.downloadLoadModel = mlbModelService.downloadLoadModel;
   vm.printJson = mlbUtilsService.prettyPrintJson;
   vm.models = [];
+
+  vm.chosenMLAlgorithm = {name: 'the algorithm of your choice'};
+  vm.chooseMLAlgorithm = function (model) {
+    vm.chosenMLAlgorithm = model;
+  };
+
   vm.onSuccessCSVUpload = function (response) {
     updateModels(response.data);
   };
@@ -19,6 +25,7 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
   function updateModels(newData) {
     mlbUtilsService.replaceArray(vm.models, newData);
     mlbUtilsService.activateTooltips();
+    mlbUtilsService.activateModals();
 
     angular.forEach(vm.models, function (item) {
       item.downloadMLModel = mlbModelService.downloadMLModel(item);

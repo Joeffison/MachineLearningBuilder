@@ -25,6 +25,10 @@ function mlbUtilsService(FileSaver, Blob,
     }, 1000);
   };
 
+  service.activateModals = function () {
+    angular.element('.modal').modal();
+  };
+
   return service;
 }
 
