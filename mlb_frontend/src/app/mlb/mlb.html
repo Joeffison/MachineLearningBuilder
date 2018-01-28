@@ -79,7 +79,7 @@
     <form class="col s12">
       <div class="row">
         <div class="input-field col s6" ng-repeat="predictor in vm.chosenMLAlgorithm.predictors">
-          <input id="first_name" type="text" class="validate">
+          <input id="first_name" type="text" class="validate" ng-model="vm.chosenMLAlgorithm.predictors_values[$index]">
           <label for="first_name">{{predictor}}</label>
         </div>
       </div>
@@ -87,7 +87,8 @@
   </div>
 
   <div class="modal-footer">
-    <a class="btn modal-action teal lighten-1">
+    <a class="btn modal-action modal-close teal lighten-1"
+    ng-click="vm.predict()">
       Predict!
     </a>
   </div>

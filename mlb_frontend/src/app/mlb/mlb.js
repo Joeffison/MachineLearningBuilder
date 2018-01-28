@@ -9,9 +9,26 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
   vm.printJson = mlbUtilsService.prettyPrintJson;
   vm.models = [];
 
-  vm.chosenMLAlgorithm = {name: 'the algorithm of your choice'};
+  vm.chosenMLAlgorithm = {name: 'the algorithm of your choice', predictors: [], predictors_values: []};
   vm.chooseMLAlgorithm = function (model) {
-    vm.chosenMLAlgorithm = model;
+    if(vm.models && model.predictors && angular.isArray(model.predictors)) {
+      vm.chosenMLAlgorithm = model;
+
+      if(!(vm.chosenMLAlgorithm.predictors_values && angular.isArray(vm.chosenMLAlgorithm.predictors_values) &&
+        vm.chosenMLAlgorithm.predictors_values.length == vm.chosenMLAlgorithm.predictors.length)) {
+        vm.chosenMLAlgorithm.predictors_values = [];
+        angular.forEach(vm.chosenMLAlgorithm.predictors, function (item) {
+          vm.chosenMLAlgorithm.predictors_values.push(undefined);
+        });
+      }
+    }
+  };
+
+  vm.predict = function () {
+    mlbModelService.predict(vm.chosenMLAlgorithm.id, [vm.chosenMLAlgorithm.predictors_values],
+      function (response) {
+        Materialize.toast('Prediction: ' + response.data.target, 4000, 'rounded');
+    });
   };
 
   vm.onSuccessCSVUpload = function (response) {
