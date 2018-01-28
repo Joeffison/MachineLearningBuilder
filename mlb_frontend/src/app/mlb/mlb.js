@@ -1,4 +1,5 @@
-function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
+function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants,
+                 $timeout) {
   var vm = this;
   vm.title = mlbConstants.PROJECT_NAME;
 
@@ -22,6 +23,11 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
         });
       }
     }
+
+    // The code below fixes the bug on Materialize Labels for dynamic filled form fields.
+    $timeout(function () {
+      Materialize.updateTextFields();
+    }, 1000);
   };
 
   vm.predict = function () {
@@ -52,4 +58,5 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants) {
 
 angular.module('app')
   .controller('MlbController', ['mlbModelService', 'mlbUtilsService', 'mlbConstants',
+    '$timeout',
     mlbCtrl]);
