@@ -46,4 +46,4 @@ class MLModel(models.Model):
         return MLModel.objects.create(algorithm=MLAlgorithm.objects.get(name=algorithm),
                                       accuracy_score=accuracy_score(tar_test, predictions),
                                       data_file=csv_file, model_file=model_file,
-                                      predictors=predictors, targets=targets)
+                                      predictors=', '.join(predictors), targets=', '.join(targets))

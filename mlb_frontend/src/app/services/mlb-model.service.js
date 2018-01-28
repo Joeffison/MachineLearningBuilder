@@ -1,4 +1,4 @@
-function mlbModelService(mlbResources, mlbUtilsService) {
+function mlbModelService(mlbResources, mlbUtilsService, $http) {
   var service = this;
 
   service.models = [];
@@ -8,6 +8,10 @@ function mlbModelService(mlbResources, mlbUtilsService) {
   }; */
 
   service.uploadURL = mlbResources.MLBUILDER_CREATE;
+
+  service.predict = function (id, predictors, onSuccess) {
+    $http.post(mlbResources.MLBUILDER_PREDICT.replace('{id}', id), {predictors: predictors}).then(onSuccess);
+  };
 
   service.downloadMLModel = function (model) {
     return mlbResources.GET_FILE + model.model_file;
@@ -26,4 +30,5 @@ function mlbModelService(mlbResources, mlbUtilsService) {
 
 angular.module('app')
   .factory('mlbModelService', ['mlbResources', 'mlbUtilsService',
+    '$http',
     mlbModelService]);

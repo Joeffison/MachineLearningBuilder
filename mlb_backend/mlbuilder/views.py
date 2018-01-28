@@ -9,11 +9,17 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, JsonResponse
 from rest_framework import status
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.exceptions import ParseError
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 
 from .models import MLModel
 from .serializers import MLModelSerializer
 
 
+@api_view(['GET', 'POST'])
 def mlmodel_list(request):
     """
     List all ML Models, or create a new one.
@@ -32,6 +38,7 @@ def mlmodel_list(request):
         # return JsonResponse(serializer.errors, status=400)
     return HttpResponse(status=404)
 
+@api_view(['GET'])
 def mlmodel_detail(request, pk):
     """
     Retrieve, update or delete a code snippet.
@@ -60,6 +67,38 @@ def mlmodel_detail(request, pk):
         # return HttpResponse(status=204)
     return HttpResponse(status=404)
 
+@api_view(['POST'])
+def mlmodel_predict(request, pk):
+    """
+    Predicts the targets based on the field predictors (from Request JSON), based on a MLModel saved with the
+    desired Primary Key.
+
+    :param request: Contains a field named *predictors* with
+    a list of n lists (with the features to make the predictions)
+
+    :param pk: Chosen Model's Primary Key
+    :return: A list with n predictions
+    """
+
+    try:
+        model = MLModel.objects.get(pk=pk)
+        predictors = request.data['predictors']
+    except MLModel.DoesNotExist as e:
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+    import pickle
+    import numpy as np
+    model = pickle.load(open(model.model_file, 'rb'))
+
+    try:
+        prediction = model.predict(np.array(predictors))
+    except Exception as e:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"target": prediction}, status=status.HTTP_200_OK)
+
 def ___build_based_on_csv(request):
     try:
         csv_file = request.FILES["file"]
@@ -76,7 +115,7 @@ def ___build_based_on_csv(request):
         # TODO: It MUST have a better way, as csv_file is <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>.
         content = csv_file.read().decode("utf-8")
         # TODO: Fix encoding
-        predictors = content.split("\n")[0].replace("\ufeff", "").replace("\r", "").split(",")
+        predictors = content.split('\n')[0].replace('\ufeff', '').replace('\r', '').encode('UTF-8').split(',')
         n_targets = 1
         targets = predictors[-n_targets:]
         predictors = predictors[:-n_targets]

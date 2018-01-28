@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     url(r'^$', views.mlmodel_list),
     url(r'^(?P<pk>[0-9]+)/$', views.mlmodel_detail),
+    url(r'^(?P<pk>[0-9]+)/predict/$', views.mlmodel_predict),
 ]
