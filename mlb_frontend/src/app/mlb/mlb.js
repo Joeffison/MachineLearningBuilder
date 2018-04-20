@@ -57,6 +57,6 @@ function mlbCtrl(mlbModelService, mlbUtilsService, mlbConstants,
 }
 
 angular.module('app')
-  .controller('MlbController', ['mlbModelService', 'mlbUtilsService', 'mlbConstants',
+  .controller('MlbController', ['mlbModelServiceMock', 'mlbUtilsService', 'mlbConstants',
     '$timeout',
     mlbCtrl]);
